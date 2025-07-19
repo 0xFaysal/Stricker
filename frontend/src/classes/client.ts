@@ -173,9 +173,6 @@ class Client {
             if (this.onPlayerDeath) {
                 // Use React component callback if available
                 this.onPlayerDeath(data.message);
-            } else {
-                // Fallback to DOM-based modal for non-React usage
-                this.showDeathModal(data.message);
             }
         });
 
@@ -338,113 +335,6 @@ class Client {
         this.io.emit("leave-game");
     }
 
-    /**
-     * Shows legacy DOM-based death modal (fallback method)
-     * 
-     * Creates and displays a death notification modal using pure DOM manipulation.
-     * This is a fallback method used when React components are not available.
-     * 
-     * @param {string} message - Death message to display to the player
-     * @returns {void}
-     */
-    showDeathModal(message: string): void {
-        // Create modal backdrop overlay
-        const modalBackdrop = document.createElement('div');
-        modalBackdrop.style.cssText = `
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.7);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-            font-family: Arial, sans-serif;
-        `;
-
-        // Create modal content container
-        const modalContent = document.createElement('div');
-        modalContent.style.cssText = `
-            background-color: white;
-            padding: 30px;
-            border-radius: 10px;
-            text-align: center;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-            max-width: 400px;
-            width: 90%;
-        `;
-
-        // Create death notification title
-        const deathMessage = document.createElement('h2');
-        deathMessage.textContent = '💀 You Died! 💀';
-        deathMessage.style.cssText = `
-            color: #d32f2f;
-            margin-bottom: 15px;
-            font-size: 24px;
-        `;
-
-        // Create death description text
-        const description = document.createElement('p');
-        description.textContent = message;
-        description.style.cssText = `
-            color: #333;
-            margin-bottom: 20px;
-            font-size: 16px;
-        `;
-
-        // Create play again button
-        const playAgainButton = document.createElement('button');
-        playAgainButton.textContent = 'Play Again';
-        playAgainButton.style.cssText = `
-            background-color: #4caf50;
-            color: white;
-            border: none;
-            padding: 12px 24px;
-            font-size: 16px;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-right: 10px;
-        `;
-
-        // Create quit game button
-        const quitButton = document.createElement('button');
-        quitButton.textContent = 'Quit Game';
-        quitButton.style.cssText = `
-            background-color: #f44336;
-            color: white;
-            border: none;
-            padding: 12px 24px;
-            font-size: 16px;
-            border-radius: 5px;
-            cursor: pointer;
-        `;
-
-        // Add button click handlers
-        playAgainButton.onclick = () => {
-            this.redirectToLogin();
-        };
-
-        quitButton.onclick = () => {
-            this.redirectToLogin();
-        };
-
-        // Assemble modal structure
-        modalContent.appendChild(deathMessage);
-        modalContent.appendChild(description);
-        modalContent.appendChild(playAgainButton);
-        modalContent.appendChild(quitButton);
-        modalBackdrop.appendChild(modalContent);
-
-        // Add modal to document
-        document.body.appendChild(modalBackdrop);
-
-        // Auto-redirect after 10 seconds
-        setTimeout(() => {
-            this.redirectToLogin();
-        }, 10000);
-    }
 
     /**
      * Redirects to login screen (legacy fallback method)

@@ -62,7 +62,7 @@ const DeathModal: React.FC<DeathModalProps> = ({
     }, [counter, onPlayAgain]);
 
     return (
-        <div className='fixed inset-0 bg-black/80 backdrop-blur-sm flex justify-center items-center z-50 font-sans animate-in fade-in duration-300 overflow-hidden'>
+        <div className='fixed inset-0 bg-black/20 backdrop-blur-sm flex justify-center items-center z-50 font-sans animate-in fade-in duration-300 overflow-hidden'>
             {/* Main Modal Container */}
             <div className='bg-gradient-to-br from-slate-800 via-slate-900 to-black p-8 rounded-2xl text-center shadow-2xl max-w-md w-11/12 border border-red-500/30 relative overflow-hidden'>
                 {/* Animated Background Effects */}
