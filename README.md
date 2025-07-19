@@ -18,19 +18,19 @@ A real-time multiplayer sticker game built with TypeScript, React, and Socket.IO
 
 ### Game Interface
 
-![Main Game Arena](https://github.com/0xFaysal/Stricker/assets/screenshots/game-arena.png)
+![Main Game Arena](frontend/public/screenshort1.png)
 
 *Real-time multiplayer gameplay with two players (Fahim and Faysal) in the arena showing character sprites, health bars, and modern UI*
 
 ### Multiplayer Sessions
 
-![Multiplayer Gameplay](https://github.com/0xFaysal/Stricker/assets/screenshots/multiplayer-sessions.png)
+![Multiplayer Gameplay](frontend/public/screenshort2.png)
 
 *Multiple browser windows demonstrating real-time synchronization between different players*
 
 ### Login Interface
 
-![Login Screen](https://github.com/0xFaysal/Stricker/assets/screenshots/login-interface.png)
+![Login Screen](frontend/public/screenshort3.png)
 
 *Stylized authentication interface featuring game controls, features overview, and modern gradient design*
 
