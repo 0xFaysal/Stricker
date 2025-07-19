@@ -13,3 +13,9 @@ export interface PlayerData {
         index: number;
     };
 }
+
+export interface serverData {
+    players: PlayerData[];
+    totalPlayers: number;
+    timestamp: number;
+}

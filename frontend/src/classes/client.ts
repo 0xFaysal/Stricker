@@ -1,5 +1,5 @@
 import { io, Socket } from "socket.io-client";
-import type { PlayerData } from "../types";
+import Game from "./Game";
 
 
 // Create socket outside the class as a singleton to prevent multiple connections
@@ -68,30 +68,11 @@ class Client {
             this.io.emit("join-game", { username: this.username });
         });
 
+        const game = new Game(context);
 
 
         this.io.on("game-status", (data) => {
-            // Update game status on the client
-            // console.log("Game status update:", data);
-
-            // Clear the canvas with device pixel ratio in mind
-            this.context.clearRect(0, 0, this.width, this.height);
-
-            // Render all players
-
-            console.log("Rendering player:", data);
-
-            data.players.forEach((player: PlayerData) => {
-                this.context.fillStyle = player.color || "#000000"; // Default color if not specified
-                this.context.fillText(JSON.stringify(player), player.position.x, player.position.y);
-            });
-
-
-            // Display total player count
-            this.context.font = "16px Arial, Helvetica, sans-serif";
-            this.context.fillStyle = "#333333";
-            this.context.textBaseline = "top";
-            this.context.fillText(`Players: ${data.totalPlayers || 0}`, 40, 10);
+            game.draw(data);
         });
 
         // Handle player death event
