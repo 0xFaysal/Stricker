@@ -55,15 +55,15 @@ export default function App() {
             </div>
 
             {/* Content Container */}
-            <div className='relative z-10 flex flex-col items-center justify-center min-h-screen p-2 sm:p-4 overflow-x-hidden w-full max-w-full'>
+            <div className='relative z-10 flex flex-col items-center justify-center  p-2 sm:p-4 overflow-x-hidden w-full max-w-full'>
                 {!username ? (
                     /* Login Screen - Show when no username is set */
-                    <div className='w-full max-w-6xl mx-auto flex flex-col items-center justify-center min-h-screen overflow-x-hidden px-2'>
+                    <div className='w-full max-w-6xl mx-auto flex flex-col items-center justify-center overflow-x-hidden px-2'>
                         <Login username={username} setUsername={setUsername} />
                     </div>
                 ) : (
                     /* Game Screen - Show when username is authenticated */
-                    <div className='w-full max-w-full mx-auto h-screen flex flex-col overflow-x-hidden'>
+                    <div className='w-full max-w-full mx-auto flex flex-col overflow-x-hidden'>
                         {/* Game Header - Top navigation and status bar */}
                         <div className='flex items-center justify-between p-2 sm:p-4 bg-black/20 backdrop-blur-sm border-b border-white/10 overflow-x-hidden'>
                             {/* Left Section - Game branding and welcome */}
