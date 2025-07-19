@@ -24,7 +24,7 @@ const DeathModal: React.FC<DeathModalProps> = ({
         }, 1000);
 
         return () => clearTimeout(timer);
-    }, [counter]);
+    }, [counter, onPlayAgain]);
 
     return (
         <div className='fixed inset-0 bg-black bg-opacity-70 flex justify-center items-center z-50 font-sans'>
