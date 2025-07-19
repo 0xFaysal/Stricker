@@ -26,20 +26,20 @@ class Game {
             //On join-game event, set the player's name
             socket.on("join-game", (playerData) => {
                 console.log("Player joining:", playerData.username);
-                
+
                 // If player doesn't exist, create a new character
                 if (!this.players[socket.id]) {
                     this.players[socket.id] = new Character(this, socket.id);
                 }
-                
+
                 // Set or update the player's name
                 this.players[socket.id].setName(playerData.username);
-                
+
                 // If player was in dead state, respawn them
                 if (this.players[socket.id] && this.players[socket.id].getPlayerInfo().health <= 0) {
                     this.players[socket.id].respawn();
                 }
-                
+
                 console.log(`Player ${playerData.username} joined successfully`);
             });            // Handle respawn requests
             socket.on("respawn", () => {
