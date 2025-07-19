@@ -45,11 +45,23 @@ app.get('/api/health', (req: Request, res: Response) => {
 });
 
 
-// game loop using setInterval framerate 1/60 seconds 
+// Game loop configuration
+const TARGET_FPS = 60;
+const FRAME_TIME = 1000 / TARGET_FPS; // 16.67ms for 60 FPS
+let lastUpdateTime = Date.now();
+
+// Optimized game loop using setInterval with proper timing
 setInterval(() => {
-    game.update(); // Update the game state
-    game.broadcastGameState(); // Broadcast the updated game state to all clients
-}, 1000 / 60);
+    const currentTime = Date.now();
+    const deltaTime = currentTime - lastUpdateTime;
+
+    // Only update if enough time has passed (throttling)
+    if (deltaTime >= FRAME_TIME) {
+        game.update(); // Update the game state
+        game.broadcastGameState(); // Broadcast the updated state to all clients
+        lastUpdateTime = currentTime;
+    }
+}, FRAME_TIME);
 
 
 // Start server

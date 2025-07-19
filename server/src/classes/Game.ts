@@ -149,14 +149,16 @@ class Game {
         const playerData = Object.values(this.players).map((player) => {
             return player.getPlayerInfo(); // Assuming getPlayerInfo returns an object with id, name, health, position, etc.
         });
-        // Broadcast the complete player data to all clients
-        Object.values(this.players).forEach((player) => {
-            player.game.io.emit("game-status", {
-                players: playerData,
-                totalPlayers: playerData.length,
-                timestamp: Date.now(),
-            });
-        });
+
+        // Broadcast once to all clients instead of individual emissions
+        const gameState = {
+            players: playerData,
+            totalPlayers: playerData.length,
+            timestamp: Date.now(),
+        };
+
+        // Single broadcast to all connected sockets - much more efficient
+        this.io.emit("game-status", gameState);
     }
 }
 
