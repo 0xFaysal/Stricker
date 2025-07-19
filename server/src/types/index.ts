@@ -18,6 +18,8 @@ export interface PlayerData {
 export interface ClientToServerEvents {
   "join-game": (playerData: { username: string }) => void;
   "key-press": (data: { key: string; pressed: boolean }) => void;
+  "respawn": () => void;
+  "leave-game": () => void;
 }
 
 export interface ServerToClientEvents {

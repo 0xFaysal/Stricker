@@ -40,19 +40,19 @@ const DeathModal: React.FC<DeathModalProps> = ({
                         onClick={onPlayAgain}
                         className='bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-6 rounded-lg transition-colors duration-200'
                     >
-                        Play Again
+                        Respawn
                     </button>
 
                     <button
                         onClick={onQuit}
                         className='bg-red-500 hover:bg-red-600 text-white font-bold py-3 px-6 rounded-lg transition-colors duration-200'
                     >
-                        Quit Game
+                        Back to Login
                     </button>
                 </div>
 
                 <p className='text-gray-500 text-sm mt-4'>
-                    Auto-redirect in {counter}{" "}
+                    Auto-respawn in {counter}{" "}
                     {counter === 1 ? "second" : "seconds"}...
                 </p>
             </div>

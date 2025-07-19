@@ -32,7 +32,27 @@ class Game {
             if (playerSprite) {
                 playerSprite.draw(this.ctx, index, player.position.x, player.position.y);
             }
+            this.drawName(player); // Draw player name
+            this.drawHealthBar(player); // Draw health bar
         });
+    }
+
+    drawName(player: PlayerData) {
+        this.ctx.font = "16px Arial";
+        this.ctx.fillStyle = player.color;
+        this.ctx.fillText(player.name, player.position.x - 20, player.position.y - 68); // Draw player name above the character
+    }
+
+    drawHealthBar(player: PlayerData) {
+        const healthBarWidth = 40;
+        const healthBarHeight = 5;
+        const healthPercentage = player.health / 100;
+
+        this.ctx.fillStyle = "red";
+        this.ctx.fillRect(player.position.x - 20, player.position.y - 66, healthBarWidth, healthBarHeight); // Background
+
+        this.ctx.fillStyle = "green";
+        this.ctx.fillRect(player.position.x - 20, player.position.y - 66, healthBarWidth * healthPercentage, healthBarHeight); // Health bar
     }
 
 }

@@ -20,26 +20,53 @@ class Game {
         // socket connection handler 
         this.io.on("connection", (socket) => {
 
-            console.log("New Client is add id:", socket.id);
-
-            // Create a new character for the player
-            this.players[socket.id] = new Character(this, socket.id);
-
-            console.log("Current Players:", this.players);
+            console.log("New Client connected with id:", socket.id);
+            // Don't create player here - wait for join-game event
 
             //On join-game event, set the player's name
             socket.on("join-game", (playerData) => {
-                console.log("Player joined:", playerData.username);
-                this.players[socket.id].setName(playerData.username); // Set the player's name
+                console.log("Player joining:", playerData.username);
+                
+                // If player doesn't exist, create a new character
+                if (!this.players[socket.id]) {
+                    this.players[socket.id] = new Character(this, socket.id);
+                }
+                
+                // Set or update the player's name
+                this.players[socket.id].setName(playerData.username);
+                
+                // If player was in dead state, respawn them
+                if (this.players[socket.id] && this.players[socket.id].getPlayerInfo().health <= 0) {
+                    this.players[socket.id].respawn();
+                }
+                
+                console.log(`Player ${playerData.username} joined successfully`);
+            });            // Handle respawn requests
+            socket.on("respawn", () => {
+                const player = this.players[socket.id];
+                if (player) {
+                    player.respawn();
+                    console.log(`Player ${player.getPlayerInfo().name} requested respawn`);
+                }
             });
 
             // Handle key presses from the client
             socket.on("key-press", ({ key, pressed }) => {
                 const player = this.players[socket.id]; // Get the player by socket ID
-                // If the player exists, update the key state in the player's keys object
-                if (player) {
+                // If the player exists and is alive, update the key state
+                if (player && player.getPlayerInfo().health > 0) {
                     // Update the key state in the player's keys object
                     player.setKeys(key, pressed);
+                }
+            });
+
+            // Handle player leaving to go back to login
+            socket.on("leave-game", () => {
+                const player = this.players[socket.id];
+                if (player) {
+                    const playerInfo = player.getPlayerInfo();
+                    console.log(`Player ${playerInfo.name} is leaving the game`);
+                    delete this.players[socket.id]; // Remove the player from the game
                 }
             });
 
@@ -56,10 +83,13 @@ class Game {
      * This method is called in a loop to update all players and check for collisions.
      */
     public update() {
-        // Update all players
+        // Update all players (only if they're alive)
         Object.values(this.players).forEach((player) => {
-            // Call the character's update method to handle movement based on keys
-            player.update();
+            // Only update living players
+            if (player.getPlayerInfo().health > 0) {
+                // Call the character's update method to handle movement based on keys
+                player.update();
+            }
         });
     }
 

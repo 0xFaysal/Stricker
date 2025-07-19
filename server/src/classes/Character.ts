@@ -225,21 +225,45 @@ class Character {
 
     /**
      * Handles the character's death.
-     * Notifies the game to remove the player and sends death event to client.
+     * Notifies the client of death but keeps the connection alive for respawn.
      */
     private handleDeath(): void {
         console.log(`Player ${this.name} (${this.id}) has died!`);
 
         // Notify the specific player that they died
         this.game.io.to(this.id).emit("player-death", {
-            message: "You died! Join again to play.",
+            message: "You died! Respawn to continue playing.",
             killedBy: null // Could be extended to track who killed whom
         });
 
-        // Remove the player from the game after a short delay
-        setTimeout(() => {
-            this.game.removePlayer(this.id);
-        }, 1000); // 1 second delay to ensure the death message is received
+        // Reset player to a "dead" state instead of removing them
+        this.resetToDeadState();
+    }
+
+    /**
+     * Resets the character to a dead state.
+     * The player remains connected but inactive until respawn.
+     */
+    private resetToDeadState(): void {
+        this.health = 0;
+        this.action = this.actions.NONE;
+        this.input = {}; // Clear all input
+        // Move player off-screen or to a safe area
+        this.position = { x: -100, y: -100 }; // Off-screen position
+        console.log(`Player ${this.name} is now in dead state`);
+    }
+
+    /**
+     * Respawns the character with full health at spawn position.
+     */
+    public respawn(): void {
+        this.health = 100;
+        this.position = { x: 100 + Math.random() * 200, y: 100 + Math.random() * 200 }; // Random spawn position
+        this.action = this.actions.NONE;
+        this.input = {};
+        this.facingRight = true;
+        this.animation = this.animations.stand;
+        console.log(`Player ${this.name} has respawned at position ${this.position.x}, ${this.position.y}`);
     }
 
 

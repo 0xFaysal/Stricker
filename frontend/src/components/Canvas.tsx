@@ -16,6 +16,9 @@ export default function Canvas({
 
     const handleRedirectToLogin = useCallback(() => {
         if (client) {
+            // Notify server that player is leaving
+            client.leaveGame();
+            // Clean up client
             client.cleanup();
         }
         setShowDeathModal(false);
@@ -27,18 +30,21 @@ export default function Canvas({
         }
     }, [client, onPlayerDeath]);
 
-    const handlePlayerDeath = useCallback(
-        (message: string) => {
-            setDeathMessage(message);
-            setShowDeathModal(true);
+    const handlePlayerDeath = useCallback((message: string) => {
+        setDeathMessage(message);
+        setShowDeathModal(true);
+    }, []);
 
-            // Auto-redirect after 10 seconds
-            setTimeout(() => {
-                handleRedirectToLogin();
-            }, 10000);
-        },
-        [handleRedirectToLogin]
-    );
+    const handlePlayAgain = useCallback(() => {
+        // Instead of creating a new client, just request respawn
+        if (client) {
+            console.log("Player requesting respawn");
+            client.respawn();
+        }
+
+        // Hide the death modal
+        setShowDeathModal(false);
+    }, [client]);
 
     useEffect(() => {
         // Create client instance only once
@@ -60,7 +66,7 @@ export default function Canvas({
                 client.cleanup();
             }
         };
-    }, [client, username]);
+    }, [client, username, handlePlayerDeath]);
 
     return (
         <div className='w-full flex justify-center items-center h-full relative'>
@@ -69,7 +75,7 @@ export default function Canvas({
             {showDeathModal && (
                 <DeathModal
                     message={deathMessage}
-                    onPlayAgain={handleRedirectToLogin}
+                    onPlayAgain={handlePlayAgain}
                     onQuit={handleRedirectToLogin}
                 />
             )}

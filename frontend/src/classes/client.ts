@@ -6,10 +6,20 @@ import Game from "./Game";
 let socketInstance: Socket | null = null;
 
 function getSocketInstance(): Socket {
-    if (!socketInstance) {
+    if (!socketInstance || socketInstance.disconnected) {
+        if (socketInstance) {
+            socketInstance.disconnect();
+        }
         socketInstance = io("http://localhost:3001");
     }
     return socketInstance;
+}
+
+function resetSocketInstance(): void {
+    if (socketInstance) {
+        socketInstance.disconnect();
+        socketInstance = null;
+    }
 }
 
 
@@ -151,10 +161,21 @@ class Client {
     cleanup(): void {
         document.removeEventListener("keydown", this.handleKeyDown);
         document.removeEventListener("keyup", this.handleKeyUp);
-        // Only disconnect if we're the ones who created the connection
-        if (this.io) {
-            this.io.disconnect();
-        }
+        // Reset the socket instance for clean reconnection
+        resetSocketInstance();
+    }
+
+    // Request respawn from the server
+    respawn(): void {
+        console.log("Requesting respawn from server");
+        this.io.emit("respawn");
+        this.io.emit("join-game", { username: this.username });
+    }
+
+    // Leave the game and go back to login
+    leaveGame(): void {
+        console.log("Leaving game and going back to login");
+        this.io.emit("leave-game");
     }
 
     // Show death modal and redirect to login page
