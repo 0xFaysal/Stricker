@@ -48,7 +48,7 @@ class Client {
         this.username = username;
         this.context = context;
         this.height = 600; // Default height
-        this.width = 800; // Default width
+        this.width = 1000; // Default width
         this.onPlayerDeath = onPlayerDeath;
         this.setupCanvas(context);
 

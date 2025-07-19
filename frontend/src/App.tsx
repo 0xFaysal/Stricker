@@ -11,25 +11,108 @@ function App() {
     };
 
     return (
-        <main className='flex flex-col items-center justify-center h-screen bg-gray-100'>
-            <h1 className='text-center text-3xl font-bold mb-4'>
-                Sticker Game
-            </h1>
-            <p className='text-center mb-4'>
-                {username
-                    ? `Welcome, ${username}!`
-                    : "Please log in to start playing."}
-            </p>
-            <div className='flex justify-center w-full h-full p-4'>
-                {username ? (
-                    <Canvas
-                        username={username}
-                        onPlayerDeath={handlePlayerDeath}
-                    />
+        <main className='min-h-screen max-w-full bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 relative overflow-x-hidden overflow-y-auto'>
+            {/* Animated Background Elements */}
+            <div className='absolute inset-0 overflow-hidden '>
+                <div className='absolute top-20 left-20 w-72 h-72 bg-purple-500/10 rounded-full blur-3xl animate-pulse' />
+                <div className='absolute bottom-20 right-20 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl animate-pulse delay-1000' />
+                <div className='absolute top-1/2 left-1/2 w-64 h-64 bg-pink-500/10 rounded-full blur-3xl animate-pulse delay-500' />
+            </div>
+
+            {/* Content Container */}
+            <div className='relative z-10 flex flex-col items-center justify-center p-2 sm:p-4 overflow-x-hidden w-full max-w-full '>
+                {!username ? (
+                    /* Login Screen */
+                    <div className='w-full max-w-6xl mx-auto flex flex-col items-center justify-center overflow-x-hidden px-2'>
+                        <Login username={username} setUsername={setUsername} />
+                    </div>
                 ) : (
-                    <Login username={username} setUsername={setUsername} />
+                    /* Game Screen */
+                    <div className='w-full max-w-full mx-auto flex flex-col overflow-x-hidden'>
+                        {/* Game Header */}
+                        <div className='flex items-center justify-between p-2 sm:p-4 bg-black/20 backdrop-blur-sm border-b border-white/10 overflow-x-hidden'>
+                            <div className='flex items-center gap-2 sm:gap-4 min-w-0 flex-1'>
+                                <h1 className='text-lg sm:text-2xl font-bold bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent whitespace-nowrap'>
+                                    STRICKER
+                                </h1>
+                                <div className='h-4 sm:h-6 w-px bg-white/20 hidden sm:block' />
+                                <span className='text-gray-300 text-sm sm:text-base truncate hidden sm:inline'>
+                                    Welcome back,{" "}
+                                    <span className='text-cyan-400 font-semibold'>
+                                        {username}
+                                    </span>
+                                    !
+                                </span>
+                            </div>
+
+                            <div className='flex items-center gap-2 sm:gap-3 flex-shrink-0'>
+                                <div className='flex items-center gap-1 sm:gap-2 text-xs sm:text-sm text-gray-300'>
+                                    <div className='w-1.5 sm:w-2 h-1.5 sm:h-2 bg-green-400 rounded-full animate-pulse' />
+                                    <span className='hidden sm:inline'>
+                                        Connected
+                                    </span>
+                                </div>
+                                <button
+                                    onClick={handlePlayerDeath}
+                                    className='px-2 sm:px-3 py-1 sm:py-1.5 bg-red-500/20 hover:bg-red-500/30 text-red-400 text-xs sm:text-sm rounded-lg border border-red-500/30 transition-colors duration-200 whitespace-nowrap'
+                                >
+                                    <span className='hidden sm:inline'>
+                                        Leave Game
+                                    </span>
+                                    <span className='sm:hidden'>Leave</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        {/* Game Canvas Area */}
+                        <div className='flex-1 p-2 sm:p-4 overflow-x-hidden'>
+                            <Canvas
+                                username={username}
+                                onPlayerDeath={handlePlayerDeath}
+                            />
+                        </div>
+
+                        {/* Game Controls Info */}
+                        <div className='absolute bottom-0 left-4 right-4 bg-black/30 backdrop-blur-sm rounded-lg p-3 text-white'>
+                            <div className='grid grid-cols-2 md:grid-cols-4 gap-4 text-sm'>
+                                <div className='flex items-center gap-2'>
+                                    <kbd className='px-2 py-1 bg-white/20 rounded text-xs'>
+                                        WASD
+                                    </kbd>
+                                    <span className='text-gray-300'>Move</span>
+                                </div>
+                                <div className='flex items-center gap-2'>
+                                    <kbd className='px-2 py-1 bg-white/20 rounded text-xs'>
+                                        Space
+                                    </kbd>
+                                    <span className='text-gray-300'>
+                                        Attack
+                                    </span>
+                                </div>
+                                <div className='flex items-center gap-2'>
+                                    <kbd className='px-2 py-1 bg-white/20 rounded text-xs'>
+                                        ↑↓←→
+                                    </kbd>
+                                    <span className='text-gray-300'>Move</span>
+                                </div>
+                                <div className='flex items-center gap-2'>
+                                    <span className='text-green-400'>⚡</span>
+                                    <span className='text-gray-300'>
+                                        Real-time
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 )}
             </div>
+
+            {/* Footer */}
+            {!username && (
+                <div className='absolute bottom-4 left-1/2 transform -translate-x-1/2 text-center text-gray-400 text-sm'>
+                    <p>© 2025 Stricker Game - Built with ❤️ by 0xFaysal</p>
+                </div>
+            )}
         </main>
     );
 }

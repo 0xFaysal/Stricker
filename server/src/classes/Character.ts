@@ -300,7 +300,7 @@ class Character {
      * Prevents the character from moving outside the defined limits.
      */
     private enforceBoundaries(): void {
-        const maxX = 800;
+        const maxX = 970;
         const maxY = 600;
         if (this.position.x < 0) this.position.x = 0;
         if (this.position.y < 0) this.position.y = 0;
